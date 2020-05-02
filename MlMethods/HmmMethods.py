@@ -13,7 +13,7 @@ class HmmMethod(Methods.Method):
         self.model = GaussianHMM(n_components=4, covariance_type="diag", n_iter=1000)
         self.model.fit(self.data)
 
-    def forecast(self, nbOfSteps):
+    def forecast(self, nb_of_steps):
         predictions = self.model.predict(self.data)
         return predictions
 
@@ -26,7 +26,7 @@ class GmmHmmMethod(Methods.Method):
         self.model = GMMHMM(n_components=4, n_mix=6, n_iter=1000)
         self.model.fit(self.data)
 
-    def forecast(self, nbOfSteps):
+    def forecast(self, nb_of_steps):
         predictions = self.model.predict(self.data)
         return predictions
 
@@ -39,6 +39,6 @@ class MultinomialHmmMethod(Methods.Method):
         self.model = MultinomialHMM(n_components=4, n_iter=1000)
         self.model.fit(self.data)
 
-    def forecast(self, nbOfSteps):
+    def forecast(self, nb_of_steps):
         predictions = self.model.predict(self.data)
         return predictions

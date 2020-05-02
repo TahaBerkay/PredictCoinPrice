@@ -19,7 +19,7 @@ class SvmMethod(Methods.Method):
         # clf = GridSearchCV(svm.OneClassSVM(), [{'kernel': ['rbf'], 'nu': nus, 'gamma': gammas}], cv=3, scoring='recall')
         # clf.fit(train_x, train_x.shape[0] * [1])
 
-    def forecast(self, nbOfSteps):
+    def forecast(self, nb_of_steps):
         predictions = self.model.predict(self.data[-1])
         return predictions
 
@@ -45,6 +45,6 @@ class SvrMethod(Methods.Method):
         # svr_lin.fit(dates, prices)
         # svr_poly.fit(dates, prices)
 
-    def forecast(self, nbOfSteps):
+    def forecast(self, nb_of_steps):
         predictions = self.model.predict(self.data[-1])
         return predictions

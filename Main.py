@@ -1,6 +1,9 @@
 import datetime
+import json
+import os
 import sys
 from concurrent.futures import ProcessPoolExecutor
+from pathlib import Path
 
 import pandas as pd
 
@@ -20,15 +23,25 @@ method_mapping = {
     Method.PROPHET: FacebookMethods.ProphetMethod,
 }
 
-running_mode = RunningMode(int(sys.argv[1]))
-methods = sys.argv[2].split(',')
-nb_of_steps = int(sys.argv[3])
 
-csv_data = None
-if running_mode == RunningMode.TRAIN:
+def get_cmd_arguments():
+    global running_mode, methods, nb_of_steps, path
+    running_mode = RunningMode(int(sys.argv[1]))
+    methods = sys.argv[2].split(',')
+    nb_of_steps = int(sys.argv[3])
+    file = sys.argv[4]
+    path = Path(__file__).parent / file
+    assert os.path.exists(path)
+    return running_mode, methods, nb_of_steps, path
+
+
+def get_csv_data(file_path):
     dateparse = lambda dates: datetime.datetime.strptime(dates, CustomSettings.DATE_FORMAT)
-    csv_data = pd.read_csv(CustomSettings.DEFAULT_DATASET, sep=',', parse_dates=['Date'],  # index_col='Date',
-                           date_parser=dateparse).fillna(0)
+    return pd.read_csv(file_path, sep=',', parse_dates=['Date'], date_parser=dateparse).fillna(0)
+
+
+running_mode, methods, nb_of_steps, path = get_cmd_arguments()
+csv_data = get_csv_data(path)
 
 executor = ProcessPoolExecutor()
 futures = []
@@ -39,15 +52,23 @@ for method in methods:
     future = None
 
     if running_mode == RunningMode.TRAIN:
-        future = executor.submit(method_object.train())
+        future = executor.submit(method_object.train)
 
     elif running_mode == RunningMode.PREDICT:
-        future = executor.submit(method_object.predict(nb_of_steps))
+        future = executor.submit(method_object.predict, nb_of_steps)
 
     else:
-        future = executor.submit(method_object.train_and_predict(nb_of_steps))
+        future = executor.submit(method_object.train_and_predict, nb_of_steps)
 
     futures.append(future)
 
 executor.shutdown(wait=True)
-future.result()
+results = []
+for future in futures:
+    result = future.result()
+    results.append(result)
+
+print(json.dumps([result.__dict__ for result in results]))
+# sys.stdout.write(json.dumps(results))
+# sys.stdout.flush()
+# sys.exit(0)
