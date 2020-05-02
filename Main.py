@@ -2,14 +2,14 @@ import datetime
 import json
 import os
 import sys
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import pandas as pd
 
 import CustomSettings
 from Enums import Method, RunningMode
-from MlMethods import ArimaMethods, HmmMethods, SvmMethods, FacebookMethods
+from MlMethods import ArimaMethods, HmmMethods, SvmMethods, FacebookMethods, GbmMethods
 
 method_mapping = {
     Method.ARIMA: ArimaMethods.ArimaMethod,
@@ -19,7 +19,7 @@ method_mapping = {
     Method.M_HMM: HmmMethods.MultinomialHmmMethod,
     Method.SVM: SvmMethods.SvmMethod,
     Method.SVR: SvmMethods.SvrMethod,
-    # Method.LIGHT_GBM: ,
+    Method.LIGHT_GBM: GbmMethods.LightGbmMethod,
     Method.PROPHET: FacebookMethods.ProphetMethod,
 }
 
@@ -43,7 +43,7 @@ def get_csv_data(file_path):
 running_mode, methods, nb_of_steps, path = get_cmd_arguments()
 csv_data = get_csv_data(path)
 
-executor = ProcessPoolExecutor()
+executor = ThreadPoolExecutor()
 futures = []
 
 for method in methods:
