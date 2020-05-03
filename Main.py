@@ -8,7 +8,7 @@ from pathlib import Path
 import pandas as pd
 
 import CustomSettings
-from Enums import Method, RunningMode
+from Enums import Method, RunningMode, DataInterval
 from MlMethods import ArimaMethods, HmmMethods, SvmMethods, FacebookMethods, GbmMethods
 
 method_mapping = {
@@ -26,12 +26,13 @@ def get_cmd_arguments():
     running_mode = RunningMode(int(sys.argv[1]))
     methods = sys.argv[2].split(',')
     nb_of_steps = int(sys.argv[3])
-    file = sys.argv[4]
+    data_interval = DataInterval[sys.argv[4]]
+    file = sys.argv[5]
     path = Path(__file__).parent / file
     assert os.path.exists(path)
     if running_mode != 2:
         os.makedirs(CustomSettings.DATAFILES_DIR, exist_ok=True)
-    return running_mode, methods, nb_of_steps, path
+    return running_mode, methods, nb_of_steps, data_interval, path
 
 
 def get_csv_data(file_path):
@@ -39,7 +40,7 @@ def get_csv_data(file_path):
     return pd.read_csv(file_path, sep=',', parse_dates=['Date'], date_parser=dateparse).fillna(0)
 
 
-running_mode, methods, nb_of_steps, path = get_cmd_arguments()
+running_mode, methods, nb_of_steps, data_interval, path = get_cmd_arguments()
 csv_data = get_csv_data(path)
 
 executor = ThreadPoolExecutor()
@@ -47,7 +48,7 @@ futures = []
 
 for method in methods:
     method_type = Method(int(method))
-    method_object = method_mapping[method_type](csv_data)
+    method_object = method_mapping[method_type](csv_data, data_interval)
     future = None
 
     if running_mode == RunningMode.TRAIN:

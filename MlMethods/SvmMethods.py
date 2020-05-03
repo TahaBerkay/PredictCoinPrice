@@ -5,9 +5,6 @@ from MlMethods import Methods
 
 
 class SvmMethod(Methods.Method):
-    def __init__(self, data):
-        super().__init__(data)
-
     def fit_model(self):
         diff = self.data.shift(-1) - self.data
         diff[diff >= 0] = 1
@@ -25,8 +22,6 @@ class SvmMethod(Methods.Method):
 
 
 class SvrMethod(Methods.Method):
-    def __init__(self, data):
-        super().__init__(data)
 
     def fit_model(self):
         diff = self.data.shift(-1) - self.data

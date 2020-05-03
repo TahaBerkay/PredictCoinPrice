@@ -5,8 +5,6 @@ from MlMethods import Methods
 
 
 class ProphetMethod(Methods.Method):
-    def __init__(self, data):
-        super().__init__(data)
 
     def manipulate_data(self):
         train_dataset = pd.DataFrame()

@@ -5,8 +5,6 @@ from MlMethods import Methods
 
 
 class ArimaMethod(Methods.Method):
-    def __init__(self, data):
-        super().__init__(data)
 
     def manipulate_data(self):
         self.data = self.data['Close']
@@ -21,8 +19,6 @@ class ArimaMethod(Methods.Method):
 
 
 class AutoArimaMethod(Methods.Method):
-    def __init__(self, data):
-        super().__init__(data)
 
     def manipulate_data(self):
         self.data = self.data['Close']

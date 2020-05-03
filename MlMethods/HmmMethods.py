@@ -13,11 +13,12 @@ from MlMethods import Methods
 class GaussianHmmMethod(Methods.Method):
     interval = 30
 
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, data, data_interval):
+        super().__init__(data, data_interval)
         self.past_likelihood = []
         self.past_change = []
-        self.model_data_path = os.path.join(CustomSettings.DATAFILES_DIR, self.__class__.__name__ + '_model_data.pkl')
+        self.model_data_path = os.path.join(CustomSettings.DATAFILES_DIR,
+                                            self.__class__.__name__ + '_model_data_' + self.data_interval.name + '.pkl')
 
     def manipulate_data(self):
         self.data = self.data.drop("Date", axis=1, inplace=False)
