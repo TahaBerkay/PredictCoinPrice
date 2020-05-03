@@ -1,7 +1,6 @@
 import abc
 import os
 import pickle
-import time
 
 import CustomSettings
 
@@ -47,28 +46,19 @@ class Method(abc.ABC):
         return PredictionResult(self.__class__.__name__, result)
 
     def train(self):
-        start_time = time.time()
         self.manipulate_data()
         self.fit_model()
         self.save_model()
-        print("%s execution time -train-: %s seconds" % (self.__class__.__name__, (time.time() - start_time)))
 
     def predict(self, nb_of_steps):
-        start_time = time.time()
         self.manipulate_data()
         self.load_model()
         prediction = self.forecast(nb_of_steps)
-        print("%s execution time -predict-: %s seconds" % (self.__class__.__name__, (time.time() - start_time)))
         return self.modify_result(prediction)
 
     def train_and_predict(self, nb_of_steps):
-        train_start_time = time.time()
         self.manipulate_data()
         self.fit_model()
         self.save_model()
-        predict_start_time = time.time()
-        print("%s execution time -train-: %s seconds" % (
-            self.__class__.__name__, (predict_start_time - train_start_time)))
         prediction = self.forecast(nb_of_steps)
-        print("%s execution time -predict-: %s seconds" % (self.__class__.__name__, (time.time() - predict_start_time)))
         return self.modify_result(prediction)
