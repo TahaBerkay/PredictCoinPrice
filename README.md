@@ -23,15 +23,12 @@ class Decision(enum.Enum):
 
 
 class Method(enum.Enum):
-    ARIMA = 1
-    AUTO_ARIMA = 2
-    HMM = 3
-    GMM_HMM = 4
-    M_HMM = 5
-    SVM = 6
-    SVR = 7
-    LIGHT_GBM = 8
-    PROPHET = 9
+    AUTO_ARIMA = 1
+    HMM = 2
+    LIGHT_GBM = 3
+    PROPHET = 4
+    SVM = 5
+    SVR = 6
 
 
 class RunningMode(enum.Enum):
