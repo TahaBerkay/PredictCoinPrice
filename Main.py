@@ -12,11 +12,8 @@ from Enums import Method, RunningMode
 from MlMethods import ArimaMethods, HmmMethods, SvmMethods, FacebookMethods, GbmMethods
 
 method_mapping = {
-    Method.ARIMA: ArimaMethods.ArimaMethod,
     Method.AUTO_ARIMA: ArimaMethods.AutoArimaMethod,
-    Method.HMM: HmmMethods.HmmMethod,
-    Method.GMM_HMM: HmmMethods.GmmHmmMethod,
-    Method.M_HMM: HmmMethods.MultinomialHmmMethod,
+    Method.HMM: HmmMethods.GaussianHmmMethod,
     Method.SVM: SvmMethods.SvmMethod,
     Method.SVR: SvmMethods.SvrMethod,
     Method.LIGHT_GBM: GbmMethods.LightGbmMethod,
@@ -32,6 +29,8 @@ def get_cmd_arguments():
     file = sys.argv[4]
     path = Path(__file__).parent / file
     assert os.path.exists(path)
+    if running_mode != 2:
+        os.makedirs(CustomSettings.DATAFILES_DIR, exist_ok=True)
     return running_mode, methods, nb_of_steps, path
 
 

@@ -22,7 +22,8 @@ class LightGbmMethod(Methods.Method):
         self.data = self.data.drop("Date", axis=1, inplace=False)
 
     def fit_model(self):
-        dataset = lgb.Dataset(self.data.drop("Close", axis=1, inplace=False)[:-1], label=self.data["Close"].shift(-1)[:-1])
+        dataset = lgb.Dataset(self.data.drop("Close", axis=1, inplace=False)[:-1],
+                              label=self.data["Close"].shift(-1)[:-1])
         self.model = lgb.train(self.params, dataset, valid_sets=[dataset], verbose_eval=50)
 
     def forecast(self, nb_of_steps):
