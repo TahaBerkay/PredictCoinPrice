@@ -50,7 +50,7 @@ class GaussianHmmMethod(Methods.Method):
             model = GaussianHMM(n_components=states, covariance_type='full', tol=0.0001, n_iter=10000)
             model.fit(self.data)
             bic_vect = np.vstack((bic_vect, -2 * model.score(self.data) + num_params * np.log(self.data.shape[0])))
-        return np.argmin(bic_vect) + 2
+        return np.argmin(bic_vect) + 3
 
     def save_model(self):
         super().save_model()
