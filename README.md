@@ -57,3 +57,9 @@ class DataInterval(enum.Enum):
 ```
 
 pyinstaller --onefile --hidden-import='pkg_resources.py2_warn' --hidden-import='_sysconfigdata_m_linux_x86_64-linux-gnu' --hidden-import='fbprophet' --additional-hooks-dir=PyInstallerHooks Main.py
+
+
+pip freeze > requirements.txt
+
+
+pip install -r requirements.txt
