@@ -2,9 +2,9 @@ import enum
 
 
 class Decision(enum.Enum):
-    BUY = 1
-    HOLD = 2
-    SELL = 3
+    SELL = 0
+    HOLD = 1
+    BUY = 2
 
 
 class Method(enum.Enum):
