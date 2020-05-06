@@ -11,7 +11,7 @@ from MlMethods import Methods
 
 
 class GaussianHmmMethod(Methods.Method):
-    interval = 30
+    window_size = 30
 
     def __init__(self, data, data_interval):
         super().__init__(data, data_interval)
@@ -28,9 +28,9 @@ class GaussianHmmMethod(Methods.Method):
         model = GaussianHMM(n_components=nb_of_states, covariance_type='full', tol=0.0001, n_iter=10000)
         self.model = model.fit(self.data)
         start_idx = 0;
-        last_interval_start_idx = self.data.shape[0] - self.interval - 1
+        last_interval_start_idx = self.data.shape[0] - self.window_size - 1
         while start_idx < last_interval_start_idx:
-            end_idx = start_idx + self.interval
+            end_idx = start_idx + self.window_size
             self.past_likelihood = np.append(self.past_likelihood,
                                              model.score(self.data.iloc[start_idx:end_idx, :]))
             self.past_change = np.append(self.past_change,
@@ -38,7 +38,7 @@ class GaussianHmmMethod(Methods.Method):
             start_idx += 1
 
     def forecast(self, nb_of_steps):
-        curr_likelihood = self.model.score(self.data.tail(self.interval))
+        curr_likelihood = self.model.score(self.data.tail(self.window_size))
         likelihood_diff_idx = np.argmin(np.absolute(self.past_likelihood - curr_likelihood))
         predicted_change = self.past_change[likelihood_diff_idx]
         return self.data.iloc[-1]['Close'] + predicted_change

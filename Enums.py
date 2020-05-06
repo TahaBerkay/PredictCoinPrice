@@ -14,12 +14,16 @@ class Method(enum.Enum):
     PROPHET = 4
     SVM = 5
     SVR = 6
+    VANILLA_LSTM = 7
+    STACKED_LSTM = 8
+    BIDIRECTIONAL_LSTM = 9
+    CNN_LSTM = 10
+    CONV_LSTM = 11
 
 
 class RunningMode(enum.Enum):
     TRAIN = 1
     PREDICT = 2
-    TRAIN_AND_PREDICT = 3
 
 
 class DataInterval(enum.Enum):
@@ -37,3 +41,11 @@ class DataInterval(enum.Enum):
     DAY_THREE = 12
     WEEK_ONE = 13
     MONTH_ONE = 14
+
+
+class CsvColumns(enum.Enum):
+    OPEN = 0
+    HIGH = 1
+    LOW = 2
+    CLOSE = 3
+    VOLUME = 4

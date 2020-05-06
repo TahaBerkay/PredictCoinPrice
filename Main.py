@@ -9,7 +9,7 @@ import pandas as pd
 
 import CustomSettings
 from Enums import Method, RunningMode, DataInterval
-from MlMethods import ArimaMethods, HmmMethods, SvmMethods, FacebookMethods, GbmMethods
+from MlMethods import ArimaMethods, HmmMethods, SvmMethods, FacebookMethods, GbmMethods, RnnMethods
 
 method_mapping = {
     Method.AUTO_ARIMA: ArimaMethods.AutoArimaMethod,
@@ -18,6 +18,11 @@ method_mapping = {
     Method.SVR: SvmMethods.SvrMethod,
     Method.LIGHT_GBM: GbmMethods.LightGbmMethod,
     Method.PROPHET: FacebookMethods.ProphetMethod,
+    Method.VANILLA_LSTM: RnnMethods.VanillaLstm,
+    Method.STACKED_LSTM: RnnMethods.StackedLstm,
+    Method.BIDIRECTIONAL_LSTM: RnnMethods.BidirectionalLstm,
+    Method.CNN_LSTM: RnnMethods.CnnLstm,
+    Method.CONV_LSTM: RnnMethods.ConvLstm,
 }
 
 
@@ -50,16 +55,10 @@ for method in methods:
     method_type = Method(int(method))
     method_object = method_mapping[method_type](csv_data, data_interval)
     future = None
-
     if running_mode == RunningMode.TRAIN:
         future = executor.submit(method_object.train)
-
-    elif running_mode == RunningMode.PREDICT:
-        future = executor.submit(method_object.predict, nb_of_steps)
-
     else:
-        future = executor.submit(method_object.train_and_predict, nb_of_steps)
-
+        future = executor.submit(method_object.predict, nb_of_steps)
     futures.append(future)
 
 executor.shutdown(wait=True)
@@ -68,7 +67,11 @@ for future in futures:
     result = future.result()
     results.append(result)
 
-print(json.dumps([result.__dict__ for result in results]))
+if running_mode == RunningMode.TRAIN:
+    print("Success")
+else:
+    print(json.dumps([result.__dict__ for result in results]))
+
 # sys.stdout.write(json.dumps(results))
 # sys.stdout.flush()
 # sys.exit(0)

@@ -61,10 +61,3 @@ class Method(abc.ABC):
         self.load_model()
         prediction = self.forecast(nb_of_steps)
         return self.modify_result(prediction)
-
-    def train_and_predict(self, nb_of_steps):
-        self.manipulate_data()
-        self.fit_model()
-        self.save_model()
-        prediction = self.forecast(nb_of_steps)
-        return self.modify_result(prediction)
