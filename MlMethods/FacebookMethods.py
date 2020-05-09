@@ -1,7 +1,25 @@
 import pandas as pd
 from fbprophet import Prophet
 
+from Enums import DataInterval
 from MlMethods import Methods
+
+pandas_date_range_mapping = {
+    DataInterval.MIN_ONE: 'min',
+    DataInterval.MIN_FIVE: '5min',
+    DataInterval.MIN_FIFTEEN: '15min',
+    DataInterval.MIN_THIRTY: '30min',
+    DataInterval.HOUR_ONE: 'H',
+    DataInterval.HOUR_TWO: '2H',
+    DataInterval.HOUR_FOUR: '4H',
+    DataInterval.HOUR_SIX: '6H',
+    DataInterval.HOUR_EIGHT: '8H',
+    DataInterval.HOUR_TWELVE: '12H',
+    DataInterval.DAY_ONE: 'D',
+    DataInterval.DAY_THREE: '3D',
+    DataInterval.WEEK_ONE: 'W',
+    DataInterval.MONTH_ONE: 'M',
+}
 
 
 class ProphetMethod(Methods.Method):
@@ -21,7 +39,9 @@ class ProphetMethod(Methods.Method):
         stan_init = self.stan_init()
         self.model = Prophet()
         self.model.fit(self.data, init=stan_init)
-        df_future = self.model.make_future_dataframe(periods=nb_of_steps, freq='min', include_history=False)
+        df_future = self.model.make_future_dataframe(periods=nb_of_steps,
+                                                     freq=pandas_date_range_mapping[self.data_interval],
+                                                     include_history=False)
         df_forecast = self.model.predict(df_future)
         return df_forecast['yhat'].values
 

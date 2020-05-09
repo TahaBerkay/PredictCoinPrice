@@ -3,7 +3,7 @@ from keras.layers import LSTM, Dense, Bidirectional, TimeDistributed, Conv1D, Ma
 
 params = {
     "batch_size": 32,
-    "epochs": 2,
+    "epochs": 20,
     "lr": 0.00010000,
     "window_size": 30,  # cnn_n_seq * cnn_n_steps = window_size
     "cnn_n_seq": 6,
