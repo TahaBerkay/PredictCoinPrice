@@ -70,7 +70,7 @@ for future in futures:
 if running_mode == RunningMode.TRAIN:
     print("Success")
 else:
-    print(json.dumps([result.__dict__ for result in results]))
+    print('Program result:' + json.dumps([result.__dict__ for result in results]))
 
 # sys.stdout.write(json.dumps(results))
 # sys.stdout.flush()
