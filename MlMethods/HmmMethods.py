@@ -11,7 +11,7 @@ from MlMethods import Methods
 
 
 class GaussianHmmMethod(Methods.Method):
-    window_size = 30
+    window_size = CustomSettings.WINDOW_SIZE
 
     def __init__(self, data, data_interval):
         super().__init__(data, data_interval)

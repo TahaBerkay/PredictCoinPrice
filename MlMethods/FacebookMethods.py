@@ -1,6 +1,7 @@
 import pandas as pd
 from fbprophet import Prophet
 
+import CustomSettings
 from Enums import DataInterval
 from MlMethods import Methods
 
@@ -23,17 +24,22 @@ pandas_date_range_mapping = {
 
 
 class ProphetMethod(Methods.Method):
+    window_size = CustomSettings.WINDOW_SIZE
 
     def manipulate_data(self):
         train_dataset = pd.DataFrame()
         train_dataset['ds'] = self.data["Date"]
         train_dataset['y'] = self.data["Close"]
-        self.data = train_dataset
+        start_idx = train_dataset.shape[0] % self.window_size
+        self.data = train_dataset[start_idx:]
 
     def fit_model(self):
         self.model = Prophet()
-        self.model.fit(self.data)
-        # m.add_seasonality(name='monthly', period=21)
+        nb_of_windows = int(self.data.shape[0] / self.window_size)
+        self.model.fit(self.data.iloc[0:self.window_size])
+        for window_idx in range(1, nb_of_windows):
+            start_idx = window_idx * self.window_size
+            self.model.fit(self.data.iloc[start_idx:start_idx + self.window_size], init=self.stan_init())
 
     def forecast(self, nb_of_steps):
         stan_init = self.stan_init()

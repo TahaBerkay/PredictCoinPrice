@@ -1,11 +1,13 @@
 from keras import Sequential
 from keras.layers import LSTM, Dense, Bidirectional, TimeDistributed, Conv1D, MaxPooling1D, Flatten, ConvLSTM2D
 
+import CustomSettings
+
 params = {
     "batch_size": 32,
     "epochs": 15,
     "lr": 0.00010000,
-    "window_size": 30,  # cnn_n_seq * cnn_n_steps = window_size
+    "window_size": CustomSettings.WINDOW_SIZE,  # cnn_n_seq * cnn_n_steps = window_size
     "cnn_n_seq": 6,
     "cnn_n_steps": 5,
     "n_features": 5
