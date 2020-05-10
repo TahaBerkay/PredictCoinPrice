@@ -53,5 +53,4 @@ class ProphetMethod(Methods.Method):
             result[param_name] = self.model.params[param_name][0][0]
         # for param_name in ['delta', 'beta']:
         #    result[param_name] = self.model.params[param_name][0]
-        result['beta'] = self.model.params['beta'][0]
         return result
