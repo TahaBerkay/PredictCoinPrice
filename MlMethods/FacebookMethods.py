@@ -45,7 +45,7 @@ class ProphetMethod(Methods.Method):
                                                      freq=pandas_date_range_mapping[self.data_interval],
                                                      include_history=False)
         df_forecast = self.model.predict(df_future)
-        return df_forecast['yhat'].values
+        return df_forecast['yhat'].values[0]
 
     def stan_init(self):
         result = {}

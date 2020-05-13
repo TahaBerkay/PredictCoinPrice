@@ -41,4 +41,4 @@ class SvrMethod(Methods.Method):
 
     def forecast(self, nb_of_steps):
         predictions = self.model.predict(self.data.iloc[-1].to_numpy().reshape(1, -1))
-        return predictions
+        return predictions[0]

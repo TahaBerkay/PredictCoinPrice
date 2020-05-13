@@ -28,7 +28,7 @@ class LightGbmMethod(Methods.Method):
 
     def forecast(self, nb_of_steps):
         prediction = self.model.predict(self.data.drop("Close", axis=1, inplace=False).iloc[-1])
-        return prediction
+        return prediction[0]
 
     def feature_importance(self):
         print('Feature importances:', list(self.model.feature_importance()))

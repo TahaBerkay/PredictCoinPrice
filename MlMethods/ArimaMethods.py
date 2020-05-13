@@ -15,7 +15,7 @@ class ArimaMethod(Methods.Method):
 
     def forecast(self, nb_of_steps):
         predictions = self.model.forecast(steps=nb_of_steps)
-        return predictions
+        return predictions[0]
 
 
 class AutoArimaMethod(Methods.Method):
@@ -42,4 +42,4 @@ class AutoArimaMethod(Methods.Method):
     def forecast(self, nb_of_steps):
         self.model.update(self.data)
         predictions = self.model.predict(n_periods=nb_of_steps)
-        return predictions
+        return predictions[0]
