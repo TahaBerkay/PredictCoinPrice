@@ -1,10 +1,17 @@
 import datetime
 import json
+import logging
 import os
 import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+logging.getLogger('tensorflow').setLevel(logging.ERROR)
+
+import warnings
+
+warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
 
 import CustomSettings

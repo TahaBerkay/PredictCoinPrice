@@ -8,7 +8,7 @@ params = {
     "epochs": 15,
     "lr": 0.00010000,
     "window_size": CustomSettings.WINDOW_SIZE,  # cnn_n_seq * cnn_n_steps = window_size
-    "cnn_n_seq": 6,
+    "cnn_n_seq": 2,
     "cnn_n_steps": 5,
     "n_features": 5
 }
@@ -59,10 +59,12 @@ def cnn_lstm():
 
 def conv_lstm():
     model = Sequential()
-    model.add(ConvLSTM2D(filters=64, kernel_size=(1, 2), activation='relu', input_shape=conv_lstm_input_format))
+    model.add(ConvLSTM2D(filters=64, kernel_size=(1, 2), activation='relu', return_sequences=True,
+                         input_shape=conv_lstm_input_format))
+    model.add(ConvLSTM2D(filters=32, kernel_size=(1, 2), activation='relu'))
     model.add(Flatten())
-    model.add(Dense(1))
-    model.compile(optimizer='adam', loss='mse')
+    model.add(Dense(3, activation='sigmoid'))
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
 

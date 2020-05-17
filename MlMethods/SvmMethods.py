@@ -1,7 +1,7 @@
-from pandas import np
 from sklearn.svm import SVC
 from sklearn.svm import SVR
 
+from DatasetHandler.DatasetProcessor import DatasetProcessor
 from Enums import Decision
 from MlMethods import Methods
 
@@ -16,15 +16,16 @@ class SvmMethod(Methods.Method):
         self.data = self.data.drop("Date", axis=1, inplace=False)
 
     def fit_model(self):
-        data_labels = np.sign(np.diff(self.data['Close'].to_numpy())) + 1
-        self.data = self.data[: -1]
+        data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
+        label = DatasetProcessor.prepare_labels(self.data)
         # self.model = GridSearchCV(estimator=SVC(), param_grid=grid_params)
-        self.model = SVC()
-        self.model.fit(self.data, data_labels)
+        self.model = SVC(C=1000)
+        self.model.fit(data, label)
 
     def forecast(self, nb_of_steps):
-        predictions = self.model.predict(self.data.iloc[-1].to_numpy().reshape(1, -1))
-        return Decision(predictions).name
+        data = DatasetProcessor.preprocess_input_data(self.data)
+        prediction = self.model.predict(data.tail(1))
+        return prediction
 
 
 class SvrMethod(Methods.Method):
@@ -33,12 +34,13 @@ class SvrMethod(Methods.Method):
         self.data = self.data.drop("Date", axis=1, inplace=False)
 
     def fit_model(self):
-        data_labels = self.data['Close'].shift(-1)[:-1]
-        self.data = self.data[: -1]
+        data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
+        label = DatasetProcessor.prepare_labels(self.data)
         # self.model = GridSearchCV(estimator=SVR(), param_grid=grid_params)
         self.model = SVR()
-        self.model.fit(self.data, data_labels)
+        self.model.fit(data, label)
 
     def forecast(self, nb_of_steps):
-        predictions = self.model.predict(self.data.iloc[-1].to_numpy().reshape(1, -1))
-        return predictions[0]
+        data = DatasetProcessor.preprocess_input_data(self.data)
+        predictions = self.model.predict(data.tail(1))
+        return Decision(predictions).name

@@ -10,6 +10,8 @@ try:
     DATE_FORMAT = config.get('custom', 'DATE_FORMAT')
     DATAFILES_DIR = config.get('custom', 'DATAFILES_DIR')
     WINDOW_SIZE = int(config.get('custom', 'WINDOW_SIZE'))
+    SHORT_PERIODS = int(config.get('custom', 'SHORT_PERIODS'))
+    SIGNAL_PERIODS = int(config.get('custom', 'SIGNAL_PERIODS'))
 except ConfigParser.NoOptionError:
     print('could not read configuration file')
     sys.exit(1)

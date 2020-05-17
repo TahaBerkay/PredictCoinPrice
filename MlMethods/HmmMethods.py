@@ -7,6 +7,7 @@ from hmmlearn.hmm import GaussianHMM
 from pandas import np
 
 import CustomSettings
+from DatasetHandler.DatasetProcessor import DatasetProcessor
 from MlMethods import Methods
 
 
@@ -24,28 +25,32 @@ class GaussianHmmMethod(Methods.Method):
         self.data = self.data.drop("Date", axis=1, inplace=False)
 
     def fit_model(self):
-        nb_of_states = self.get_number_of_opt_states()
+        data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
+        nb_of_states = 2  # self.get_number_of_opt_states()
         model = GaussianHMM(n_components=nb_of_states, covariance_type='full', tol=0.0001, n_iter=10000)
-        self.model = model.fit(self.data)
+        self.model = model.fit(data)
         start_idx = 0;
-        last_interval_start_idx = self.data.shape[0] - self.window_size - 1
+        last_interval_start_idx = data.shape[0] - self.window_size - 1
         while start_idx < last_interval_start_idx:
             end_idx = start_idx + self.window_size
             self.past_likelihood = np.append(self.past_likelihood,
-                                             model.score(self.data.iloc[start_idx:end_idx, :]))
+                                             model.score(data.iloc[start_idx:end_idx, :]))
             self.past_change = np.append(self.past_change,
-                                         self.data['Close'][end_idx] - self.data['Close'][end_idx - 1])
+                                         (pd.np.sign(
+                                             self.data['Close'][end_idx] - self.data['Close'][end_idx - 1]) + 1))
             start_idx += 1
+        self.past_change = self.past_change.astype(int)
 
     def forecast(self, nb_of_steps):
+        self.data = DatasetProcessor.preprocess_input_data(self.data)
         curr_likelihood = self.model.score(self.data.tail(self.window_size))
         likelihood_diff_idx = np.argmin(np.absolute(self.past_likelihood - curr_likelihood))
         predicted_change = self.past_change[likelihood_diff_idx]
-        return self.data.iloc[-1]['Close'] + predicted_change
+        return predicted_change
 
     def get_number_of_opt_states(self):
         bic_vect = np.empty([0, 1])
-        for states in range(3, 8):
+        for states in range(3, 10):
             num_params = states ** 2 + states
             model = GaussianHMM(n_components=states, covariance_type='full', tol=0.0001, n_iter=10000)
             model.fit(self.data)

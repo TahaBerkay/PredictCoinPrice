@@ -1,6 +1,7 @@
 from pmdarima.arima import auto_arima
 from statsmodels.tsa.arima_model import ARIMA
 
+from DatasetHandler.DatasetProcessor import DatasetProcessor
 from MlMethods import Methods
 
 
@@ -42,4 +43,4 @@ class AutoArimaMethod(Methods.Method):
     def forecast(self, nb_of_steps):
         self.model.update(self.data)
         predictions = self.model.predict(n_periods=nb_of_steps)
-        return predictions[0]
+        return DatasetProcessor.prepare_result(predictions[0], self.data.tail(1).values[0])
