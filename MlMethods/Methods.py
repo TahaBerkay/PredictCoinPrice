@@ -12,7 +12,7 @@ file_extension = '.pkl'
 class PredictionResult:
     def __init__(self, method_name, data):
         self.model = method_name
-        self.data = data
+        self.data = int(data)
         # if isinstance(data, str):  # TODO
         #    self.data = data.split()
         # else:

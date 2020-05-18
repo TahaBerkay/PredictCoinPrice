@@ -43,4 +43,4 @@ class SvrMethod(Methods.Method):
     def forecast(self, nb_of_steps):
         data = DatasetProcessor.preprocess_input_data(self.data)
         predictions = self.model.predict(data.tail(1))
-        return Decision(predictions).name
+        return predictions

@@ -18,7 +18,7 @@ class TechnicalIndicatorHelper:
         macd = TechnicalIndicatorHelper.moving_average_convergence_divergence(data)
         so = TechnicalIndicatorHelper.stochastic_oscillator(data)
         return pd.concat([rsi, roc, ema.rename('ema'), macd.rename('macd'), so.rename('so')], axis=1).iloc[
-               long_periods + short_periods:].reset_index()
+               long_periods + short_periods:].reset_index().fillna(0)
 
     @staticmethod
     def prepare_indicator_based_input_data_detailed(data):
