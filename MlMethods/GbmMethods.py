@@ -7,14 +7,13 @@ from MlMethods import Methods
 
 
 class LightGbmMethod(Methods.Method):
-    params = {
-        "boosting": ['gbdt'],  # , 'dart'
-        "num_leaves": [32, 64, 96, 128, 160, 192, 224, 256],
-        'max_depth': range(3, 10, 2),
-        "min_data_in_leaf": [25, 50, 75, 100, 125, 150, 175],
-        "learning_rate": [0.01, 0.1, 1],
-        "n_estimators": [60, 80, 100, 120, 140, 160],
-    }
+    params = [{'max_depth': [-1]},
+              {'num_leaves': [4, 5, 6], 'max_depth': [3], 'min_data_in_leaf': [25, 50, 75, 100, 125, 150, 175]},
+              {'num_leaves': [8, 10, 12, 14], 'max_depth': [4], 'min_data_in_leaf': [25, 50, 75, 100, 125, 150, 175]},
+              {'num_leaves': [16, 20, 24, 28], 'max_depth': [5], 'min_data_in_leaf': [25, 50, 75, 100, 125, 150, 175]},
+              {'num_leaves': [32, 40, 48, 56], 'max_depth': [6], 'min_data_in_leaf': [25, 50, 75, 100, 125, 150, 175]},
+              {'num_leaves': [64, 80, 96, 112], 'max_depth': [7], 'min_data_in_leaf': [25, 50, 75, 100, 125, 150, 175]},
+              {'num_leaves': [128, 160, 192, 224], 'max_depth': [8], 'min_data_in_leaf': [25, 50, 75, 100, 125, 150, 175]}]
 
     def manipulate_data(self):
         self.data = self.data.drop("Date", axis=1, inplace=False)
@@ -38,7 +37,7 @@ class LightGbmMethod(Methods.Method):
         return prediction[-1]
 
     def feature_importance(self):
-        print('Feature importances:', list(self.model.feature_importance()))
+        print('Feature importances:', list(self.model.feature_importances_))
         # plt.show()
 
 
