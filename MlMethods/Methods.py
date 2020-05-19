@@ -30,7 +30,7 @@ class Method(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def forecast(self, nb_of_steps):
+    def forecast(self):
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -57,8 +57,8 @@ class Method(abc.ABC):
         self.fit_model()
         self.save_model()
 
-    def predict(self, nb_of_steps):
+    def predict(self):
         self.manipulate_data()
         self.load_model()
-        prediction = self.forecast(nb_of_steps)
+        prediction = self.forecast()
         return self.modify_result(prediction)

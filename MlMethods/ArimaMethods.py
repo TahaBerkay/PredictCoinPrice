@@ -14,8 +14,8 @@ class ArimaMethod(Methods.Method):
         model_arima = ARIMA(self.data, order=(2, 1, 0))
         self.model = model_arima.fit(disp=-1)
 
-    def forecast(self, nb_of_steps):
-        predictions = self.model.forecast(steps=nb_of_steps)
+    def forecast(self):
+        predictions = self.model.forecast(steps=1)
         return predictions[0]
 
 
@@ -40,7 +40,7 @@ class AutoArimaMethod(Methods.Method):
                                       stepwise=True)
         self.model = model_auto_arima.fit(y=self.data, disp=-1)
 
-    def forecast(self, nb_of_steps):
+    def forecast(self):
         self.model.update(self.data)
-        predictions = self.model.predict(n_periods=nb_of_steps)
+        predictions = self.model.predict(n_periods=1)
         return DatasetProcessor.prepare_result(predictions[0], self.data.tail(1).values[0])

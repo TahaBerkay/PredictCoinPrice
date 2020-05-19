@@ -11,14 +11,15 @@ class Method(enum.Enum):
     AUTO_ARIMA = 1
     HMM = 2
     LIGHT_GBM = 3
-    PROPHET = 4
-    SVM = 5
-    SVR = 6
-    VANILLA_LSTM = 7
-    STACKED_LSTM = 8
-    BIDIRECTIONAL_LSTM = 9
-    CNN_LSTM = 10
-    CONV_LSTM = 11
+    XGBOOST = 4
+    PROPHET = 5
+    SVM = 6
+    SVR = 7
+    VANILLA_LSTM = 10
+    STACKED_LSTM = 11
+    BIDIRECTIONAL_LSTM = 12
+    CNN_LSTM = 13
+    CONV_LSTM = 14
 
 
 class RunningMode(enum.Enum):

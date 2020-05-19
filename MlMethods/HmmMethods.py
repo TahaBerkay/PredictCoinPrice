@@ -29,7 +29,7 @@ class GaussianHmmMethod(Methods.Method):
         nb_of_states = self.get_number_of_opt_states()
         model = GaussianHMM(n_components=nb_of_states, covariance_type='full', tol=0.0001, n_iter=10000)
         self.model = model.fit(data)
-        start_idx = 0;
+        start_idx = 0
         last_interval_start_idx = data.shape[0] - self.window_size - 1
         while start_idx < last_interval_start_idx:
             end_idx = start_idx + self.window_size
@@ -41,7 +41,7 @@ class GaussianHmmMethod(Methods.Method):
             start_idx += 1
         self.past_change = self.past_change.astype(int)
 
-    def forecast(self, nb_of_steps):
+    def forecast(self):
         self.data = DatasetProcessor.preprocess_input_data(self.data)
         curr_likelihood = self.model.score(self.data.tail(self.window_size))
         likelihood_diff_idx = np.argmin(np.absolute(self.past_likelihood - curr_likelihood))
@@ -50,12 +50,12 @@ class GaussianHmmMethod(Methods.Method):
 
     def get_number_of_opt_states(self):
         bic_vect = np.empty([0, 1])
-        for states in range(3, 10):
+        for states in range(2, 30):
             num_params = states ** 2 + states
             model = GaussianHMM(n_components=states, covariance_type='full', tol=0.0001, n_iter=10000)
             model.fit(self.data)
             bic_vect = np.vstack((bic_vect, -2 * model.score(self.data) + num_params * np.log(self.data.shape[0])))
-        return np.argmin(bic_vect) + 3
+        return np.argmin(bic_vect) + 2
 
     def save_model(self):
         super().save_model()

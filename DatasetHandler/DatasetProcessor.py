@@ -12,7 +12,7 @@ class DatasetProcessor:
 
     @staticmethod
     def preprocess_input_data(data):
-        input = TechnicalIndicatorHelper.prepare_indicator_based_input_data(data)
+        input = TechnicalIndicatorHelper.prepare_important_indicators_based_input_data(data)
         return input
 
     @staticmethod

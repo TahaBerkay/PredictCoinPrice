@@ -38,11 +38,11 @@ class ProphetMethod(Methods.Method):
         self.model.fit(self.data)
         # m.add_seasonality(name='monthly', period=21)
 
-    def forecast(self, nb_of_steps):
+    def forecast(self):
         stan_init = self.stan_init()
         self.model = Prophet()
         self.model.fit(self.data, init=stan_init)
-        df_future = self.model.make_future_dataframe(periods=nb_of_steps,
+        df_future = self.model.make_future_dataframe(periods=1,
                                                      freq=pandas_date_range_mapping[self.data_interval],
                                                      include_history=False)
         df_forecast = self.model.predict(df_future)

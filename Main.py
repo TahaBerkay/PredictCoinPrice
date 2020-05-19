@@ -21,10 +21,10 @@ from MlMethods import ArimaMethods, HmmMethods, SvmMethods, FacebookMethods, Gbm
 method_mapping = {
     Method.AUTO_ARIMA: ArimaMethods.AutoArimaMethod,
     Method.HMM: HmmMethods.GaussianHmmMethod,
-    Method.SVM: SvmMethods.SvmMethod,
-    Method.SVR: SvmMethods.SvrMethod,
     Method.LIGHT_GBM: GbmMethods.LightGbmMethod,
+    Method.XGBOOST: GbmMethods.XGBoostMethod,
     Method.PROPHET: FacebookMethods.ProphetMethod,
+    Method.SVM: SvmMethods.SvmMethod,
     Method.VANILLA_LSTM: RnnMethods.VanillaLstm,
     Method.STACKED_LSTM: RnnMethods.StackedLstm,
     Method.BIDIRECTIONAL_LSTM: RnnMethods.BidirectionalLstm,
@@ -34,17 +34,16 @@ method_mapping = {
 
 
 def get_cmd_arguments():
-    global running_mode, methods, nb_of_steps, path
-    running_mode = RunningMode(int(sys.argv[1]))
+    global running_mode, methods, path
+    running_mode = RunningMode[sys.argv[1]]
     methods = sys.argv[2].split(',')
-    nb_of_steps = int(sys.argv[3])
-    data_interval = DataInterval[sys.argv[4]]
-    file = sys.argv[5]
+    data_interval = DataInterval[sys.argv[3]]
+    file = sys.argv[4]
     path = Path(__file__).parent / file
     assert os.path.exists(path)
     if running_mode != 2:
         os.makedirs(CustomSettings.DATAFILES_DIR, exist_ok=True)
-    return running_mode, methods, nb_of_steps, data_interval, path
+    return running_mode, methods, data_interval, path
 
 
 def get_csv_data(file_path):
@@ -52,7 +51,7 @@ def get_csv_data(file_path):
     return pd.read_csv(file_path, sep=',', parse_dates=['Date'], date_parser=dateparse).fillna(0)
 
 
-running_mode, methods, nb_of_steps, data_interval, path = get_cmd_arguments()
+running_mode, methods, data_interval, path = get_cmd_arguments()
 csv_data = get_csv_data(path)
 
 executor = ThreadPoolExecutor()
@@ -65,7 +64,7 @@ for method in methods:
     if running_mode == RunningMode.TRAIN:
         future = executor.submit(method_object.train)
     else:
-        future = executor.submit(method_object.predict, nb_of_steps)
+        future = executor.submit(method_object.predict)
     futures.append(future)
 
 executor.shutdown(wait=True)

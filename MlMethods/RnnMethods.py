@@ -25,7 +25,7 @@ class LstmMethod(Methods.Method):
     def manipulate_data(self):
         self.data = self.data.drop("Date", axis=1, inplace=False)
 
-    def forecast(self, nb_of_steps):
+    def forecast(self):
         return self.make_prediction(RnnModelCreators.prediction_input_format).item(0)
 
     def make_prediction(self, input_format):
@@ -103,7 +103,7 @@ class CnnLstm(LstmMethod):
         self.model = RnnModelCreators.cnn_lstm()
         self.model.fit(self.input_windows, self.next_price, epochs=RnnModelCreators.params["epochs"], verbose=2)
 
-    def forecast(self, nb_of_steps):
+    def forecast(self):
         return self.make_prediction(RnnModelCreators.prediction_cnn_input_format).item(0)
 
 
@@ -116,5 +116,5 @@ class ConvLstm(LstmMethod):
         self.model.fit(self.input_windows, to_categorical(self.next_price), epochs=RnnModelCreators.params["epochs"],
                        verbose=2)
 
-    def forecast(self, nb_of_steps):
+    def forecast(self):
         return self.make_prediction(RnnModelCreators.prediction_conv_lstm_input_format).item(0)

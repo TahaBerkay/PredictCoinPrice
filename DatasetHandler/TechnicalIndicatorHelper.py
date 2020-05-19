@@ -11,6 +11,14 @@ signal_periods = CustomSettings.SIGNAL_PERIODS
 class TechnicalIndicatorHelper:
 
     @staticmethod
+    def prepare_important_indicators_based_input_data(data):
+        rsi = TechnicalIndicatorHelper.relative_strength_index(data)
+        macd = TechnicalIndicatorHelper.moving_average_convergence_divergence(data)
+        so = TechnicalIndicatorHelper.stochastic_oscillator(data)
+        return pd.concat([rsi, macd.rename('macd'), so.rename('so')], axis=1).iloc[
+               long_periods + short_periods:].fillna(0)[['rsi', 'macd', 'so']]
+
+    @staticmethod
     def prepare_indicator_based_input_data(data):
         rsi = TechnicalIndicatorHelper.relative_strength_index(data)
         roc = TechnicalIndicatorHelper.rate_of_change(data)
