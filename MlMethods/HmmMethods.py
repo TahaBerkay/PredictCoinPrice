@@ -26,7 +26,7 @@ class GaussianHmmMethod(Methods.Method):
 
     def fit_model(self):
         data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
-        nb_of_states = self.get_number_of_opt_states()
+        nb_of_states = 20 # self.get_number_of_opt_states()
         model = GaussianHMM(n_components=nb_of_states, covariance_type='full', tol=0.0001, n_iter=10000)
         self.model = model.fit(data)
         start_idx = 0
@@ -50,7 +50,7 @@ class GaussianHmmMethod(Methods.Method):
 
     def get_number_of_opt_states(self):
         bic_vect = np.empty([0, 1])
-        for states in range(2, 30):
+        for states in range(2, 20):
             num_params = states ** 2 + states
             model = GaussianHMM(n_components=states, covariance_type='full', tol=0.0001, n_iter=10000)
             model.fit(self.data)
