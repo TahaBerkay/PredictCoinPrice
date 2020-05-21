@@ -5,7 +5,7 @@ import CustomSettings
 
 params = {
     "batch_size": 32,
-    "epochs": 15,
+    "epochs": 12,
     "lr": 0.00010000,
     "window_size": CustomSettings.WINDOW_SIZE,  # cnn_n_seq * cnn_n_steps = window_size
     "cnn_n_seq": 2,
