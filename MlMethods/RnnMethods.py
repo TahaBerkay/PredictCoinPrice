@@ -101,7 +101,8 @@ class CnnLstm(LstmMethod):
         self.input_windows = self.input_windows.reshape((self.input_windows.shape[0],) +
                                                         RnnModelCreators.cnn_input_format)
         self.model = RnnModelCreators.cnn_lstm()
-        self.model.fit(self.input_windows, self.next_price, epochs=RnnModelCreators.params["epochs"], verbose=2)
+        self.model.fit(self.input_windows, to_categorical(self.next_price), epochs=RnnModelCreators.params["epochs"],
+                       verbose=2)
 
     def forecast(self):
         return self.make_prediction(RnnModelCreators.prediction_cnn_input_format).item(0)

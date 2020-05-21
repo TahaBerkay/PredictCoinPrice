@@ -5,7 +5,7 @@ import CustomSettings
 
 params = {
     "batch_size": 32,
-    "epochs": 12,
+    "epochs": 30,
     "lr": 0.00010000,
     "window_size": CustomSettings.WINDOW_SIZE,  # cnn_n_seq * cnn_n_steps = window_size
     "cnn_n_seq": 2,
@@ -49,19 +49,22 @@ def bidirectional_lstm():
 def cnn_lstm():
     model = Sequential()
     model.add(TimeDistributed(Conv1D(filters=64, kernel_size=1, activation='relu'), input_shape=cnn_input_format))
+    model.add(TimeDistributed(Conv1D(filters=32, kernel_size=1, activation='relu')))
     model.add(TimeDistributed(MaxPooling1D(pool_size=2)))
     model.add(TimeDistributed(Flatten()))
+    model.add(LSTM(50, activation='relu', return_sequences=True))
     model.add(LSTM(50, activation='relu'))
-    model.add(Dense(1))
-    model.compile(optimizer='adam', loss='mse')
+    model.add(Dense(3, activation='softmax'))
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
 
 def conv_lstm():
     model = Sequential()
-    model.add(ConvLSTM2D(filters=64, kernel_size=(1, 2), activation='relu', input_shape=conv_lstm_input_format))
+    model.add(ConvLSTM2D(filters=64, kernel_size=(1, 2), activation='relu', return_sequences=True, input_shape=conv_lstm_input_format))
+    model.add(ConvLSTM2D(filters=32, kernel_size=(1, 2), activation='relu'))
     model.add(Flatten())
-    model.add(Dense(3, activation='sigmoid'))
+    model.add(Dense(3, activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
