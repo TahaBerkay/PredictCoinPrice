@@ -10,7 +10,7 @@ params = {
     "window_size": CustomSettings.WINDOW_SIZE,  # cnn_n_seq * cnn_n_steps = window_size
     "cnn_n_seq": 2,
     "cnn_n_steps": 5,
-    "n_features": 5
+    "n_features": 3
 }
 
 input_format = (params["window_size"], params["n_features"])
