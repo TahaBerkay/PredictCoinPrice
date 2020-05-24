@@ -12,6 +12,7 @@ logging.getLogger('tensorflow').setLevel(logging.ERROR)
 import warnings
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=RuntimeWarning)
 import pandas as pd
 
 import CustomSettings

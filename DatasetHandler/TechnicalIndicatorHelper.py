@@ -19,7 +19,8 @@ class TechnicalIndicatorHelper:
         so = TechnicalIndicatorHelper.stochastic_oscillator(data)
         return \
             pd.concat([adxi.rename('adxi'), cci.rename('cci'), rsi, macd.rename('macd'), so.rename('so')], axis=1).iloc[
-            long_periods + short_periods:].fillna(0)[['adxi', 'cci', 'rsi', 'macd', 'so']]
+            long_periods + short_periods:].replace([pd.np.inf, -pd.np.inf], pd.np.nan).fillna(0)[
+                ['adxi', 'cci', 'rsi', 'macd', 'so']]
 
     @staticmethod
     def prepare_indicator_based_input_data(data):
