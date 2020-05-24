@@ -10,7 +10,7 @@ params = {
     "window_size": CustomSettings.WINDOW_SIZE,  # cnn_n_seq * cnn_n_steps = window_size
     "cnn_n_seq": 1,
     "cnn_n_steps": 5,
-    "n_features": 3
+    "n_features": 5
 }
 
 input_format = (params["window_size"], params["n_features"])
@@ -61,7 +61,8 @@ def cnn_lstm():
 
 def conv_lstm():
     model = Sequential()
-    model.add(ConvLSTM2D(filters=64, kernel_size=(1, 2), activation='relu', return_sequences=True, input_shape=conv_lstm_input_format))
+    model.add(ConvLSTM2D(filters=64, kernel_size=(1, 2), activation='relu', return_sequences=True,
+                         input_shape=conv_lstm_input_format))
     model.add(ConvLSTM2D(filters=32, kernel_size=(1, 2), activation='relu'))
     model.add(Flatten())
     model.add(Dense(3, activation='softmax'))

@@ -13,7 +13,8 @@ class LightGbmMethod(Methods.Method):
               {'num_leaves': [16, 20, 24, 28], 'max_depth': [5], 'min_data_in_leaf': [25, 50, 75, 100, 125, 150, 175]},
               {'num_leaves': [32, 40, 48, 56], 'max_depth': [6], 'min_data_in_leaf': [25, 50, 75, 100, 125, 150, 175]},
               {'num_leaves': [64, 80, 96, 112], 'max_depth': [7], 'min_data_in_leaf': [25, 50, 75, 100, 125, 150, 175]},
-              {'num_leaves': [128, 160, 192, 224], 'max_depth': [8], 'min_data_in_leaf': [25, 50, 75, 100, 125, 150, 175]}]
+              {'num_leaves': [128, 160, 192, 224], 'max_depth': [8],
+               'min_data_in_leaf': [25, 50, 75, 100, 125, 150, 175]}]
 
     def manipulate_data(self):
         self.data = self.data.drop("Date", axis=1, inplace=False)

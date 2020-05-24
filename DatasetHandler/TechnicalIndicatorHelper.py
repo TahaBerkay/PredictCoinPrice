@@ -12,11 +12,14 @@ class TechnicalIndicatorHelper:
 
     @staticmethod
     def prepare_important_indicators_based_input_data(data):
+        adxi = TechnicalIndicatorHelper.average_directional_movement_index(data)
+        cci = TechnicalIndicatorHelper.commodity_channel_index(data)
         rsi = TechnicalIndicatorHelper.relative_strength_index(data)
         macd = TechnicalIndicatorHelper.moving_average_convergence_divergence(data)
         so = TechnicalIndicatorHelper.stochastic_oscillator(data)
-        return pd.concat([rsi, macd.rename('macd'), so.rename('so')], axis=1).iloc[
-               long_periods + short_periods:].fillna(0)[['rsi', 'macd', 'so']]
+        return \
+            pd.concat([adxi.rename('adxi'), cci.rename('cci'), rsi, macd.rename('macd'), so.rename('so')], axis=1).iloc[
+            long_periods + short_periods:].fillna(0)[['adxi', 'cci', 'rsi', 'macd', 'so']]
 
     @staticmethod
     def prepare_indicator_based_input_data(data):
@@ -41,6 +44,11 @@ class TechnicalIndicatorHelper:
         wr = TechnicalIndicatorHelper.williams_r_indicator(data)
         so = TechnicalIndicatorHelper.stochastic_oscillator(data)
         return pd.concat([rsi, roc, tsi, ema, macd, adxi, wr, so], axis=1)
+
+    @staticmethod
+    def commodity_channel_index(data):
+        return ta.trend.CCIIndicator(high=data['High'], low=data['Low'], close=data['Close'],
+                                     n=long_periods).cci()
 
     @staticmethod
     def rate_of_change(data):
