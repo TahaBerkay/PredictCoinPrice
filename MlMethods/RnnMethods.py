@@ -12,7 +12,7 @@ from MlMethods import Methods, RnnModelCreators
 
 class LstmMethod(Methods.Method):
     window_size = RnnModelCreators.params["window_size"]
-    train_cols = ["rsi", "macd", "so"]
+    train_cols = ['adxi', 'cci', 'rsi', 'macd', 'so']
 
     def __init__(self, data, data_interval):
         super().__init__(data, data_interval)
