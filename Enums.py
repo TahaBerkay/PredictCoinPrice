@@ -21,7 +21,6 @@ class Method(enum.Enum):
     BERNOULLI_NB = 11
     CATBOOST = 12
     GHMM = 13
-    GMMHMM = 14
     SVR = 15
     KNN_REGRESSOR = 16
     LINEAR_REGRESSOR = 17
