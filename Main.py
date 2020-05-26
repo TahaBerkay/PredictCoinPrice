@@ -37,6 +37,8 @@ method_mapping = {
     Method.GAUSSIAN_NB: NaiveBayesMethods.GaussianNBMethod,
     Method.BERNOULLI_NB: NaiveBayesMethods.BernoulliNBMethod,
     Method.CATBOOST: GbmMethods.CatBoostMethod,
+    Method.GHMM: HmmMethods.GHmmMethod,
+    Method.GMMHMM: HmmMethods.GmmHmmMethod,
     Method.VANILLA_LSTM: RnnMethods.VanillaLstm,
     Method.STACKED_LSTM: RnnMethods.StackedLstm,
     Method.BIDIRECTIONAL_LSTM: RnnMethods.BidirectionalLstm,

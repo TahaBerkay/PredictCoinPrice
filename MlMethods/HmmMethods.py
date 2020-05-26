@@ -1,7 +1,7 @@
 import os
 
 import pandas as pd
-# from hmmlearn.hmm import GMMHMM
+from hmmlearn.hmm import GMMHMM
 # from hmmlearn.hmm import MultinomialHMM
 from hmmlearn.hmm import GaussianHMM
 from pandas import np
@@ -67,3 +67,81 @@ class GaussianHmmMethod(Methods.Method):
         model_data = pd.read_pickle(self.model_data_path)
         self.past_change = model_data['change']
         self.past_likelihood = model_data['likelihood']
+
+
+class GHmmMethod(Methods.Method):
+    window_size = CustomSettings.WINDOW_SIZE
+
+    def __init__(self, data, data_interval):
+        super().__init__(data, data_interval)
+        self.model_data_path = os.path.join(CustomSettings.DATAFILES_DIR,
+                                            self.__class__.__name__ + '_model_data_' + self.data_interval.name + '.pkl')
+
+    def manipulate_data(self):
+        self.data = self.data.drop("Date", axis=1, inplace=False)
+
+    def fit_model(self):
+        data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
+        label = DatasetProcessor.prepare_labels(self.data)
+        nb_of_states = 5  # self.get_number_of_opt_states()
+
+        sell_indexes = [i for i in range(len(label)) if label[i] == 0]
+        sell_model = GaussianHMM(n_components=nb_of_states, covariance_type='full', tol=0.0001, n_iter=10000)
+        sell_model = sell_model.fit(data.iloc[sell_indexes, :])
+
+        hold_indexes = [i for i in range(len(label)) if label[i] == 1]
+        hold_model = GaussianHMM(n_components=nb_of_states, covariance_type='full', tol=0.0001, n_iter=10000)
+        hold_model = hold_model.fit(data.iloc[hold_indexes, :])
+
+        buy_indexes = [i for i in range(len(label)) if label[i] == 2]
+        buy_model = GaussianHMM(n_components=nb_of_states, covariance_type='full', tol=0.0001, n_iter=10000)
+        buy_model = buy_model.fit(data.iloc[buy_indexes, :])
+
+        self.model = dict({"sell_model": sell_model, "hold_model": hold_model, "buy_model": buy_model})
+
+    def forecast(self):
+        self.data = DatasetProcessor.preprocess_input_data(self.data)
+        log_likelihoods = (self.model["sell_model"].score(self.data.tail(1)),
+                           self.model["hold_model"].score(self.data.tail(1)),
+                           self.model["buy_model"].score(self.data.tail(1)))
+        prediction = np.where(log_likelihoods == np.amax(log_likelihoods))
+        return prediction
+
+
+class GmmHmmMethod(Methods.Method):
+    window_size = CustomSettings.WINDOW_SIZE
+
+    def __init__(self, data, data_interval):
+        super().__init__(data, data_interval)
+        self.model_data_path = os.path.join(CustomSettings.DATAFILES_DIR,
+                                            self.__class__.__name__ + '_model_data_' + self.data_interval.name + '.pkl')
+
+    def manipulate_data(self):
+        self.data = self.data.drop("Date", axis=1, inplace=False)
+
+    def fit_model(self):
+        data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
+        label = DatasetProcessor.prepare_labels(self.data)
+        nb_of_states = 5  # self.get_number_of_opt_states()
+
+        sell_indexes = [i for i in range(len(label)) if label[i] == 0]
+        sell_model = GMMHMM(n_components=nb_of_states, covariance_type='full', tol=0.0001, n_iter=10000)
+        sell_model = sell_model.fit(data.iloc[sell_indexes, :])
+
+        hold_indexes = [i for i in range(len(label)) if label[i] == 1]
+        hold_model = GMMHMM(n_components=nb_of_states, covariance_type='full', tol=0.0001, n_iter=10000)
+        hold_model = hold_model.fit(data.iloc[hold_indexes, :])
+
+        buy_indexes = [i for i in range(len(label)) if label[i] == 2]
+        buy_model = GMMHMM(n_components=nb_of_states, covariance_type='full', tol=0.0001, n_iter=10000)
+        buy_model = buy_model.fit(data.iloc[buy_indexes, :])
+
+        self.model = dict({"sell_model": sell_model, "hold_model": hold_model, "buy_model": buy_model})
+
+    def forecast(self):
+        self.data = DatasetProcessor.preprocess_input_data(self.data)
+        log_likelihoods = (self.model["sell_model"].score(self.data.tail(1)),
+                           self.model["hold_model"].score(self.data.tail(1)),
+                           self.model["buy_model"].score(self.data.tail(1)))
+        prediction = np.where(log_likelihoods == np.amax(log_likelihoods))
+        return prediction
