@@ -1,16 +1,15 @@
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GridSearchCV
-from sklearn.svm import SVC
-from sklearn.svm import SVR
 
 from DatasetHandler.DatasetProcessor import DatasetProcessor
 from MlMethods import Methods
 
-grid_params = {'C': [0.001, 0.01, 0.1, 1, 10, 100],
-               'gamma': ['scale', 'auto'],
-               'kernel': ['rbf']}
+grid_params = {'max_depth': [None, 3, 5, 7, 9, 11],
+               'n_estimators': range(80, 220, 20)}
 
 
-class SvmMethod(Methods.Method):
+class RandomForestClassifierMethod(Methods.Method):
 
     def manipulate_data(self):
         self.data = self.data.drop("Date", axis=1, inplace=False)
@@ -19,7 +18,7 @@ class SvmMethod(Methods.Method):
         data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
         label = DatasetProcessor.prepare_labels(self.data)
         self.model = GridSearchCV(
-            estimator=SVC(),
+            estimator=RandomForestClassifier(),
             param_grid=grid_params,
             cv=4,
             n_jobs=-1,
@@ -34,7 +33,7 @@ class SvmMethod(Methods.Method):
         return prediction
 
 
-class SvrMethod(Methods.Method):
+class RandomForestRegressorMethod(Methods.Method):
 
     def manipulate_data(self):
         self.data = self.data.drop("Date", axis=1, inplace=False)
@@ -43,7 +42,7 @@ class SvrMethod(Methods.Method):
         data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
         label = DatasetProcessor.prepare_labels(self.data)
         self.model = GridSearchCV(
-            estimator=SVR(),
+            estimator=RandomForestRegressor(),
             param_grid=grid_params,
             cv=4,
             n_jobs=-1,
@@ -54,5 +53,5 @@ class SvrMethod(Methods.Method):
 
     def forecast(self):
         data = DatasetProcessor.preprocess_input_data(self.data)
-        predictions = self.model.predict(data.tail(1))
-        return predictions
+        prediction = self.model.predict(data.tail(1))
+        return prediction

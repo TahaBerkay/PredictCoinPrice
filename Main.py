@@ -17,7 +17,8 @@ import pandas as pd
 
 import CustomSettings
 from Enums import Method, RunningMode, DataInterval
-from MlMethods import ArimaMethods, HmmMethods, SvmMethods, FacebookMethods, GbmMethods, RnnMethods
+from MlMethods import ArimaMethods, HmmMethods, SvmMethods, FacebookMethods, GbmMethods, RnnMethods, KNearestMethods, \
+    LinearMethods, RandomForestMethods, NaiveBayesMethods
 
 method_mapping = {
     Method.AUTO_ARIMA: ArimaMethods.AutoArimaMethod,
@@ -26,6 +27,15 @@ method_mapping = {
     Method.XGBOOST: GbmMethods.XGBoostMethod,
     Method.PROPHET: FacebookMethods.ProphetMethod,
     Method.SVM: SvmMethods.SvmMethod,
+    Method.SVR: SvmMethods.SvrMethod,
+    Method.KNN_CLASSIFIER: KNearestMethods.KNeighborsClassifierMethod,
+    Method.KNN_REGRESSOR: KNearestMethods.KNeighborsRegressorMethod,
+    Method.LOGISTIC_REGRESSOR: LinearMethods.LogisticRegressionMethod,
+    Method.LINEAR_REGRESSOR: LinearMethods.LinearRegressionMethod,
+    Method.RANDOMFOREST_CLASSIFIER: RandomForestMethods.RandomForestClassifierMethod,
+    Method.RANDOMFOREST_REGRESSOR: RandomForestMethods.RandomForestRegressorMethod,
+    Method.GAUSSIAN_NB: NaiveBayesMethods.GaussianNBMethod,
+    Method.BERNOULLI_NB: NaiveBayesMethods.BernoulliNBMethod,
     Method.VANILLA_LSTM: RnnMethods.VanillaLstm,
     Method.STACKED_LSTM: RnnMethods.StackedLstm,
     Method.BIDIRECTIONAL_LSTM: RnnMethods.BidirectionalLstm,

@@ -1,16 +1,16 @@
 from sklearn.model_selection import GridSearchCV
-from sklearn.svm import SVC
-from sklearn.svm import SVR
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import KNeighborsRegressor
 
 from DatasetHandler.DatasetProcessor import DatasetProcessor
 from MlMethods import Methods
 
-grid_params = {'C': [0.001, 0.01, 0.1, 1, 10, 100],
-               'gamma': ['scale', 'auto'],
-               'kernel': ['rbf']}
+grid_params = {'leaf_size': range(2, 40, 2),
+               'n_neighbors': range(2, 15),
+               'p': [1, 2]}
 
 
-class SvmMethod(Methods.Method):
+class KNeighborsClassifierMethod(Methods.Method):
 
     def manipulate_data(self):
         self.data = self.data.drop("Date", axis=1, inplace=False)
@@ -19,7 +19,7 @@ class SvmMethod(Methods.Method):
         data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
         label = DatasetProcessor.prepare_labels(self.data)
         self.model = GridSearchCV(
-            estimator=SVC(),
+            estimator=KNeighborsClassifier(),
             param_grid=grid_params,
             cv=4,
             n_jobs=-1,
@@ -34,7 +34,7 @@ class SvmMethod(Methods.Method):
         return prediction
 
 
-class SvrMethod(Methods.Method):
+class KNeighborsRegressorMethod(Methods.Method):
 
     def manipulate_data(self):
         self.data = self.data.drop("Date", axis=1, inplace=False)
@@ -43,7 +43,7 @@ class SvrMethod(Methods.Method):
         data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
         label = DatasetProcessor.prepare_labels(self.data)
         self.model = GridSearchCV(
-            estimator=SVR(),
+            estimator=KNeighborsRegressor(),
             param_grid=grid_params,
             cv=4,
             n_jobs=-1,
@@ -54,5 +54,5 @@ class SvrMethod(Methods.Method):
 
     def forecast(self):
         data = DatasetProcessor.preprocess_input_data(self.data)
-        predictions = self.model.predict(data.tail(1))
-        return predictions
+        prediction = self.model.predict(data.tail(1))
+        return prediction
