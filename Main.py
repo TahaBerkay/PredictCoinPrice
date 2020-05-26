@@ -36,6 +36,7 @@ method_mapping = {
     Method.RANDOMFOREST_REGRESSOR: RandomForestMethods.RandomForestRegressorMethod,
     Method.GAUSSIAN_NB: NaiveBayesMethods.GaussianNBMethod,
     Method.BERNOULLI_NB: NaiveBayesMethods.BernoulliNBMethod,
+    Method.CATBOOST: GbmMethods.CatBoostMethod,
     Method.VANILLA_LSTM: RnnMethods.VanillaLstm,
     Method.STACKED_LSTM: RnnMethods.StackedLstm,
     Method.BIDIRECTIONAL_LSTM: RnnMethods.BidirectionalLstm,

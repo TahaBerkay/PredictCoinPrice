@@ -1,5 +1,7 @@
 import lightgbm as lgb
 import xgboost as xgb
+# from catboost import CatBoostRegressor
+from catboost import CatBoostClassifier
 from sklearn.model_selection import GridSearchCV
 
 from DatasetHandler.DatasetProcessor import DatasetProcessor
@@ -59,6 +61,38 @@ class XGBoostMethod(Methods.Method):
         label = DatasetProcessor.prepare_labels(self.data)
         self.model = GridSearchCV(
             estimator=xgb.XGBClassifier(),
+            param_grid=self.params,
+            cv=4,
+            n_jobs=-1,
+            scoring='accuracy',
+            verbose=2
+        )
+        self.model.fit(data, label)
+
+    def forecast(self):
+        input = DatasetProcessor.preprocess_input_data(self.data)
+        prediction = self.model.predict(input)
+        return prediction[-1]
+
+    def feature_importance(self):
+        print('Feature importances:', list(self.model.feature_importances_))
+        # plt.show()
+
+
+class CatBoostMethod(Methods.Method):
+    params = {
+        'depth': range(3, 11),
+        # 'learning_rate': [0.0001, 0.001, 0.01, 0.1, 1],
+    }
+
+    def manipulate_data(self):
+        self.data = self.data.drop("Date", axis=1, inplace=False)
+
+    def fit_model(self):
+        data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
+        label = DatasetProcessor.prepare_labels(self.data)
+        self.model = GridSearchCV(
+            estimator=CatBoostClassifier(),
             param_grid=self.params,
             cv=4,
             n_jobs=-1,
