@@ -9,6 +9,7 @@ try:
     DEFAULT_DATASET = config.get('custom', 'DEFAULT_DATASET')
     DATE_FORMAT = config.get('custom', 'DATE_FORMAT')
     DATAFILES_DIR = config.get('custom', 'DATAFILES_DIR')
+    HOLD_RANGE = float(config.get('custom', 'HOLD_RANGE'))
     WINDOW_SIZE = int(config.get('custom', 'WINDOW_SIZE'))
     SHORT_PERIODS = int(config.get('custom', 'SHORT_PERIODS'))
     SIGNAL_PERIODS = int(config.get('custom', 'SIGNAL_PERIODS'))

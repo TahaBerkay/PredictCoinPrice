@@ -9,6 +9,7 @@ signal_periods = CustomSettings.SIGNAL_PERIODS
 
 
 class DatasetProcessor:
+    self_hold_range = CustomSettings.HOLD_RANGE
 
     @staticmethod
     def preprocess_input_data(data):
@@ -17,10 +18,15 @@ class DatasetProcessor:
 
     @staticmethod
     def prepare_labels(data):
-        label = (pd.np.sign(pd.np.diff(data['Close'].to_numpy())) + 1)[long_periods + short_periods:]
+        hold_ranges = (data['Close'] * DatasetProcessor.self_hold_range)[:-1]
+        close_diffs = pd.np.diff(data['Close'].to_numpy())
+        label_list = [int(pd.np.sign(close_diff) + 1 if abs(close_diff) > hold_range else 1) for close_diff, hold_range in zip(close_diffs, hold_ranges)]
+        label = label_list[long_periods + short_periods:]
         # label = data["Close"].shift(-1)[:-1].iloc[long_periods+short_periods:].reset_index()
-        return label.astype(int)
+        return label
 
     @staticmethod
     def prepare_result(prediction, previous):
-        return (pd.np.sign(prediction - previous) + 1).astype(int)
+        diff = prediction - previous
+        label = pd.np.sign(diff) + 1 if abs(diff) > (prediction * DatasetProcessor.self_hold_range) else 1
+        return label
