@@ -8,7 +8,13 @@ from sklearn.metrics import accuracy_score, \
     f1_score, \
     precision_score, \
     recall_score, \
-    classification_report
+    confusion_matrix
+
+
+######################################
+# https://datascience.stackexchange.com/a/40904
+# https://stackoverflow.com/a/55759038/2528884
+######################################
 
 
 class AccuracyResult:
@@ -59,21 +65,22 @@ for filename in os.listdir(directory):
                                              )
 
             print('Accuracy result:' + json.dumps([accuracy_result.__dict__]))
-            #print(classification_report(df['true'], df['prediction']))
+            print('Confusion Matrix result:')
+            print(pd.np.matrix(confusion_matrix(df['true'], df['prediction'])))
+            # print(classification_report(df['true'], df['prediction']))
     else:
         continue
 
 methods = ['LightGbmMethod',
-          'CatBoostMethod',
-          'GaussianNBMethod',
-          'BernoulliNBMethod',
-          'LogisticRegressionMethod',
-          'SvmMethod',
-          'XGBoostMethod',
-          'GHmmMethod']
+           'CatBoostMethod',
+           'GaussianNBMethod',
+           'BernoulliNBMethod',
+           'LogisticRegressionMethod',
+           'SvmMethod',
+           'XGBoostMethod',
+           'GHmmMethod']
 
 max_acc = {}
-
 
 x = len(methods)
 for idx, i in enumerate(range(1 << x)):
@@ -85,21 +92,21 @@ for idx, i in enumerate(range(1 << x)):
     means = round(prediction_of_specific_methods.mean(axis=0)).astype(int)
     most_frequents = prediction_of_specific_methods.apply(lambda x: x.value_counts().idxmax())
 
-    #print(subset)
-    #print('--1--')
-    #print(classification_report(df['true'], means))
+    # print(subset)
+    # print('--1--')
+    # print(classification_report(df['true'], means))
 
-    #print('--2--')
-    #print(classification_report(df['true'], most_frequents))
+    # print('--2--')
+    # print(classification_report(df['true'], most_frequents))
 
-    #max_acc[', '.join(map(str, subset))] = max(accuracy_score(df['true'], means),
+    # max_acc[', '.join(map(str, subset))] = max(accuracy_score(df['true'], means),
     #                                           accuracy_score(df['true'], most_frequents))
 
-    max_acc[', '.join(map(str, subset)) + ':' + 'mean'] = accuracy_score(df['true'], means)
-    max_acc[', '.join(map(str, subset)) + ':' + 'most_frequents'] = accuracy_score(df['true'], most_frequents)
+    max_acc[', '.join(map(str, subset)) + ':' + 'mean'] = f1_score(df['true'], means, average='macro')
+    max_acc[', '.join(map(str, subset)) + ':' + 'most_frequents'] = f1_score(df['true'], most_frequents,
+                                                                             average='macro')
 
-
-    #print('****************************')
+    # print('****************************')
 
 max_key = max(max_acc, key=max_acc.get)
 print(max_key)
@@ -109,6 +116,17 @@ sorted_dict = sorted(max_acc, key=max_acc.get, reverse=True)
 print(sorted_dict[9])
 print(max_acc[sorted_dict[9]])
 
-print("\n".join(sorted_dict[:10]))
-#print("\n".join(max_acc[sorted_dict[:10]]))   # matrix = [[j for j in range(5)] for i in range(5)]
+prediction_of_specific_methods = pd.DataFrame(
+    [all_result_map[x.strip()]['prediction'] for x in sorted_dict[0].split(':')[0].split(',')])
+means = round(prediction_of_specific_methods.mean(axis=0)).astype(int)
+print('Max Confusion Matrix result:')
+print(pd.np.matrix(confusion_matrix(df['true'], means)))
 
+prediction_of_specific_methods = pd.DataFrame(
+    [all_result_map[x.strip()]['prediction'] for x in sorted_dict[1].split(':')[0].split(',')])
+means = round(prediction_of_specific_methods.mean(axis=0)).astype(int)
+print('Second Confusion Matrix result:')
+print(pd.np.matrix(confusion_matrix(df['true'], means)))
+
+print("\n".join(sorted_dict[:10]))
+# print("\n".join(max_acc[sorted_dict[:10]]))   # matrix = [[j for j in range(5)] for i in range(5)]
