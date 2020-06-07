@@ -6,6 +6,8 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+from MlMethods.Methods import PredictionResult
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 logging.getLogger('tensorflow').setLevel(logging.ERROR)
 
@@ -64,6 +66,14 @@ def get_csv_data(file_path):
     return pd.read_csv(file_path, sep=',', parse_dates=['Date'], date_parser=dateparse).fillna(0)
 
 
+def run_algo_combinations():
+    result_dict = {result.model: result.data for result in results}
+    for algorithms in CustomSettings.ALGORITHM_COMBINATIONS:
+        prediction_of_specific_methods = pd.DataFrame([result_dict[x] for x in algorithms])
+        means = round(prediction_of_specific_methods.mean(axis=0)).astype(int)
+        results.append(PredictionResult(','.join(algorithms), means))
+
+
 running_mode, methods, data_interval, path = get_cmd_arguments()
 csv_data = get_csv_data(path)
 
@@ -89,6 +99,7 @@ for future in futures:
 if running_mode == RunningMode.TRAIN:
     print("Success")
 else:
+    run_algo_combinations()
     print('Program result:' + json.dumps([result.__dict__ for result in results]))
 
 # sys.stdout.write(json.dumps(results))

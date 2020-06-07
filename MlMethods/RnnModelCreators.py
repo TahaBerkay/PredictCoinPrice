@@ -9,7 +9,7 @@ params = {
     "lr": 0.00010000,
     "window_size": CustomSettings.WINDOW_SIZE,  # cnn_n_seq * cnn_n_steps = window_size
     "cnn_n_seq": 1,
-    "cnn_n_steps": 5,
+    "cnn_n_steps": 3,
     "n_features": 5
 }
 

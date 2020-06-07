@@ -1,3 +1,4 @@
+import json
 import sys
 from configparser import RawConfigParser, ConfigParser
 
@@ -13,6 +14,7 @@ try:
     WINDOW_SIZE = int(config.get('custom', 'WINDOW_SIZE'))
     SHORT_PERIODS = int(config.get('custom', 'SHORT_PERIODS'))
     SIGNAL_PERIODS = int(config.get('custom', 'SIGNAL_PERIODS'))
+    ALGORITHM_COMBINATIONS = json.loads(config.get('custom', 'ALGORITHM_COMBINATIONS'))['algorithms']
 except ConfigParser.NoOptionError:
     print('could not read configuration file')
     sys.exit(1)
