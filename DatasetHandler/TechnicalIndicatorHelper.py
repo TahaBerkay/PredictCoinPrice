@@ -48,36 +48,41 @@ class TechnicalIndicatorHelper:
 
     @staticmethod
     def commodity_channel_index(data):
-        return ta.trend.CCIIndicator(high=data['High'], low=data['Low'], close=data['Close']).cci()
+        return ta.trend.CCIIndicator(high=data['High'], low=data['Low'], close=data['Close'],
+                                     n=long_periods).cci()
 
     @staticmethod
     def rate_of_change(data):
-        return ta.momentum.roc(close=data['Close'])
+        return ta.momentum.roc(close=data['Close'], n=long_periods)
 
     @staticmethod
     def relative_strength_index(data):
-        return ta.momentum.RSIIndicator(close=data['Close']).rsi()
+        return ta.momentum.RSIIndicator(close=data['Close'], n=long_periods).rsi()
 
     @staticmethod
     def exponential_moving_average(data):
-        return ta.trend.EMAIndicator(close=data['Close']).ema_indicator()
+        return ta.trend.EMAIndicator(close=data['Close'], n=long_periods).ema_indicator()
 
     @staticmethod
     def moving_average_convergence_divergence(data):
-        return ta.trend.MACD(close=data['Close']).macd()
+        return ta.trend.MACD(close=data['Close'], n_fast=short_periods, n_slow=long_periods,
+                             n_sign=signal_periods).macd()
 
     @staticmethod
     def average_directional_movement_index(data):
-        return ta.trend.ADXIndicator(high=data['High'], low=data['Low'], close=data['Close']).adx()
+        return ta.trend.ADXIndicator(high=data['High'], low=data['Low'], close=data['Close'],
+                                     n=long_periods).adx()
 
     @staticmethod
     def true_strength_index(data):
-        return ta.momentum.TSIIndicator(close=data['Close']).tsi()
+        return ta.momentum.TSIIndicator(close=data['Close'], r=long_periods, s=short_periods).tsi()
 
     @staticmethod
     def williams_r_indicator(data):
-        return ta.momentum.WilliamsRIndicator(high=data['High'], low=data['Low'], close=data['Close']).wr()
+        return ta.momentum.WilliamsRIndicator(high=data['High'], low=data['Low'], close=data['Close'],
+                                              lbp=long_periods).wr()
 
     @staticmethod
     def stochastic_oscillator(data):
-        return ta.momentum.StochasticOscillator(high=data['High'], low=data['Low'], close=data['Close']).stoch()
+        return ta.momentum.StochasticOscillator(high=data['High'], low=data['Low'], close=data['Close'],
+                                                n=long_periods).stoch()
