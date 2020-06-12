@@ -17,10 +17,15 @@ class TechnicalIndicatorHelper:
         rsi = TechnicalIndicatorHelper.relative_strength_index(data)
         macd = TechnicalIndicatorHelper.moving_average_convergence_divergence(data)
         so = TechnicalIndicatorHelper.stochastic_oscillator(data)
+        close_diffs = pd.Series(pd.np.roll(pd.np.diff(data['Close'].to_numpy()), 1))
+        close_diffs2 = pd.Series(pd.np.roll(pd.np.diff(data['Close'].to_numpy()), 2))
+        close_diffs3 = pd.Series(pd.np.roll(pd.np.diff(data['Close'].to_numpy()), 3))
+        prediction_of_specific_methods = pd.DataFrame([close_diffs, close_diffs2, close_diffs3])
+        means = prediction_of_specific_methods.mean(axis=0)
         return \
-            pd.concat([adxi.rename('adxi'), cci.rename('cci'), rsi, macd.rename('macd'), so.rename('so')], axis=1).iloc[
+            pd.concat([adxi.rename('adxi'), cci.rename('cci'), rsi, macd.rename('macd'), so.rename('so'), means.rename('means')], axis=1).iloc[
             long_periods + short_periods:].replace([pd.np.inf, -pd.np.inf], pd.np.nan).fillna(0)[
-                ['adxi', 'cci', 'rsi', 'macd', 'so']]
+                ['adxi', 'cci', 'rsi', 'macd', 'so', 'means']]
 
     @staticmethod
     def prepare_indicator_based_input_data(data):

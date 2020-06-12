@@ -23,7 +23,7 @@ class SvmMethod(Methods.Method):
             param_grid=grid_params,
             cv=4,
             n_jobs=-1,
-            scoring='accuracy',
+            scoring='balanced_accuracy',
             verbose=2
         )
         self.model.fit(data, label)

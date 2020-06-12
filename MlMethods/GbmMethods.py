@@ -29,7 +29,7 @@ class LightGbmMethod(Methods.Method):
             param_grid=self.params,
             cv=4,
             n_jobs=-1,
-            scoring='accuracy',
+            scoring='balanced_accuracy',
             verbose=2
         )
         self.model.fit(data, label)
@@ -64,7 +64,7 @@ class XGBoostMethod(Methods.Method):
             param_grid=self.params,
             cv=4,
             n_jobs=-1,
-            scoring='accuracy',
+            scoring='balanced_accuracy',
             verbose=2
         )
         self.model.fit(data, label)
@@ -96,7 +96,7 @@ class CatBoostMethod(Methods.Method):
             param_grid=self.params,
             cv=4,
             n_jobs=-1,
-            scoring='accuracy',
+            scoring='balanced_accuracy',
             verbose=2
         )
         self.model.fit(data, label)
