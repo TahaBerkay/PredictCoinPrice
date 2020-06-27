@@ -14,12 +14,12 @@ from MlMethods import Methods
 class GaussianHmmMethod(Methods.Method):
     window_size = CustomSettings.WINDOW_SIZE
 
-    def __init__(self, data, data_interval):
-        super().__init__(data, data_interval)
+    def __init__(self, data, data_interval, currency_symbol):
+        super().__init__(data, data_interval, currency_symbol)
         self.past_likelihood = []
         self.past_change = []
         self.model_data_path = os.path.join(CustomSettings.DATAFILES_DIR,
-                                            self.__class__.__name__ + '_model_data_' + self.data_interval.name + '.pkl')
+                                            self.currency_symbol.name + '_' + self.data_interval.name + '_' + self.__class__.__name__ + '_model_data' + '.pkl')
 
     def manipulate_data(self):
         self.data = self.data.drop("Date", axis=1, inplace=False)
@@ -72,10 +72,10 @@ class GaussianHmmMethod(Methods.Method):
 class GHmmMethod(Methods.Method):
     window_size = CustomSettings.WINDOW_SIZE
 
-    def __init__(self, data, data_interval):
-        super().__init__(data, data_interval)
+    def __init__(self, data, data_interval, currency_symbol):
+        super().__init__(data, data_interval, currency_symbol)
         self.model_data_path = os.path.join(CustomSettings.DATAFILES_DIR,
-                                            self.__class__.__name__ + '_model_data_' + self.data_interval.name + '.pkl')
+                                            self.currency_symbol.name + '_' + self.data_interval.name + '_' + self.__class__.__name__ + '_model_data' + '.pkl')
 
     def manipulate_data(self):
         self.data = self.data.drop("Date", axis=1, inplace=False)

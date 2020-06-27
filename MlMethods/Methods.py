@@ -20,9 +20,10 @@ class PredictionResult:
 
 
 class Method(abc.ABC):
-    def __init__(self, data, data_interval):
+    def __init__(self, data, data_interval, currency_symbol):
         self.data = data
         self.data_interval = data_interval
+        self.currency_symbol = currency_symbol
         self.model = None
 
     @abc.abstractmethod
@@ -39,13 +40,13 @@ class Method(abc.ABC):
 
     def save_model(self):
         path = os.path.join(CustomSettings.DATAFILES_DIR,
-                            self.__class__.__name__ + '_' + self.data_interval.name + file_extension)
+                            self.currency_symbol.name + '_' + self.data_interval.name + '_' + self.__class__.__name__ + file_extension)
         with open(path, file_mode_write_binary) as pkl:
             pickle.dump(self.model, pkl)
 
     def load_model(self):
         path = os.path.join(CustomSettings.DATAFILES_DIR,
-                            self.__class__.__name__ + '_' + self.data_interval.name + file_extension)
+                            self.currency_symbol.name + '_' + self.data_interval.name + '_' + self.__class__.__name__ + file_extension)
         with open(path, file_mode_read_binary) as pkl:
             self.model = pickle.load(pkl)
 

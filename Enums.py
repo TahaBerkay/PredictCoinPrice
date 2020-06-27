@@ -60,3 +60,35 @@ class CsvColumns(enum.Enum):
     LOW = 2
     CLOSE = 3
     VOLUME = 4
+
+
+class CurrencySymbols(enum.Enum):
+    BTCUSDT = 0
+    ETHUSDT = 1
+    XRPUSDT = 2
+    BCHUSDT = 3
+    BSVUSDT = 4
+    LTCUSDT = 5
+    BNBUSDT = 6
+    EOSUSDT = 7
+    ADAUSDT = 8
+    XTZUSDT = 9
+    CROUSDT = 10
+    XLMUSDT = 11
+    LINKUSDT = 12
+    LEOUSDT = 13
+    XMRUSDT = 14
+    TRXUSDT = 15
+    HTUSDT = 16
+    NEOUSDT = 17
+    ETCUSDT = 18
+    USDCUSDT = 19
+    DASHUSDT = 20
+    MIOTAUSDT = 21
+    ATOMUSDT = 22
+    MKRUSDT = 23
+    VETUSDT = 24
+    HEDGUSDT = 25
+    ZECUSDT = 26
+    XEMUSDT = 27
+    ONTUSDT = 28

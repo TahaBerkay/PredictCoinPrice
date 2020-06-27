@@ -14,13 +14,13 @@ class LstmMethod(Methods.Method):
     window_size = RnnModelCreators.params["window_size"]
     train_cols = ['adxi', 'cci', 'rsi', 'macd', 'so']
 
-    def __init__(self, data, data_interval):
-        super().__init__(data, data_interval)
+    def __init__(self, data, data_interval, currency_symbol):
+        super().__init__(data, data_interval, currency_symbol)
         self.min_max_scaler = None
         self.input_windows = []
         self.next_price = None
         self.model_data_path = os.path.join(CustomSettings.DATAFILES_DIR,
-                                            self.__class__.__name__ + '_scaler_' + self.data_interval.name + '.pkl')
+                                            self.currency_symbol.name + '_' + self.data_interval.name + '_' + self.__class__.__name__ + '_scaler' + '.pkl')
 
     def manipulate_data(self):
         self.data = self.data.drop("Date", axis=1, inplace=False)

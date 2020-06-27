@@ -18,7 +18,7 @@ warnings.simplefilter(action='ignore', category=RuntimeWarning)
 import pandas as pd
 
 import CustomSettings
-from Enums import Method, RunningMode, DataInterval
+from Enums import Method, RunningMode, DataInterval, CurrencySymbols
 from MlMethods import ArimaMethods, HmmMethods, SvmMethods, FacebookMethods, GbmMethods, RnnMethods, KNearestMethods, \
     LinearMethods, RandomForestMethods, NaiveBayesMethods
 
@@ -53,12 +53,13 @@ def get_cmd_arguments():
     running_mode = RunningMode[sys.argv[1]]
     methods = sys.argv[2].split(',')
     data_interval = DataInterval[sys.argv[3]]
-    file = sys.argv[4]
+    currency_symbol = CurrencySymbols[sys.argv[4]]
+    file = sys.argv[5]
     path = Path(__file__).parent / file
     assert os.path.exists(path)
     if running_mode != 2:
         os.makedirs(CustomSettings.DATAFILES_DIR, exist_ok=True)
-    return running_mode, methods, data_interval, path
+    return running_mode, methods, data_interval, currency_symbol, path
 
 
 def get_csv_data(file_path):
@@ -74,7 +75,7 @@ def run_algo_combinations():
         results.append(PredictionResult(','.join(algorithms), means))
 
 
-running_mode, methods, data_interval, path = get_cmd_arguments()
+running_mode, methods, data_interval, currency_symbol, path = get_cmd_arguments()
 csv_data = get_csv_data(path)
 
 executor = ThreadPoolExecutor()
@@ -82,7 +83,7 @@ futures = []
 
 for method in methods:
     method_type = Method(int(method))
-    method_object = method_mapping[method_type](csv_data, data_interval)
+    method_object = method_mapping[method_type](csv_data, data_interval, currency_symbol)
     future = None
     if running_mode == RunningMode.TRAIN:
         future = executor.submit(method_object.train)
