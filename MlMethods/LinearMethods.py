@@ -17,10 +17,9 @@ class LogisticRegressionMethod(Methods.Method):
         data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
         label = DatasetProcessor.prepare_labels(self.data)
         self.model = GridSearchCV(
-            estimator=LogisticRegression(max_iter=1000),
+            estimator=LogisticRegression(n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,max_iter=1000),
             param_grid=self.grid_params,
             cv=4,
-            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='balanced_accuracy',
             verbose=2
         )

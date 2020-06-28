@@ -26,10 +26,9 @@ class LightGbmMethod(Methods.Method):
         data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
         label = DatasetProcessor.prepare_labels(self.data)
         self.model = GridSearchCV(
-            estimator=lgb.LGBMClassifier(),
+            estimator=lgb.LGBMClassifier(n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH),
             param_grid=self.params,
             cv=4,
-            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='balanced_accuracy',
             verbose=2
         )
@@ -61,10 +60,9 @@ class XGBoostMethod(Methods.Method):
         data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
         label = DatasetProcessor.prepare_labels(self.data)
         self.model = GridSearchCV(
-            estimator=xgb.XGBClassifier(),
+            estimator=xgb.XGBClassifier(n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH),
             param_grid=self.params,
             cv=4,
-            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='balanced_accuracy',
             verbose=2
         )
@@ -93,10 +91,9 @@ class CatBoostMethod(Methods.Method):
         data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
         label = DatasetProcessor.prepare_labels(self.data)
         self.model = GridSearchCV(
-            estimator=CatBoostClassifier(),
+            estimator=CatBoostClassifier(n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH),
             param_grid=self.params,
             cv=4,
-            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='balanced_accuracy',
             verbose=2
         )

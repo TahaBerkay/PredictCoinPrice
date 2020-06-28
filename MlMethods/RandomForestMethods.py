@@ -19,10 +19,9 @@ class RandomForestClassifierMethod(Methods.Method):
         data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
         label = DatasetProcessor.prepare_labels(self.data)
         self.model = GridSearchCV(
-            estimator=RandomForestClassifier(),
+            estimator=RandomForestClassifier(n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH),
             param_grid=grid_params,
             cv=4,
-            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='balanced_accuracy',
             verbose=2
         )
@@ -43,10 +42,9 @@ class RandomForestRegressorMethod(Methods.Method):
         data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
         label = DatasetProcessor.prepare_labels(self.data)
         self.model = GridSearchCV(
-            estimator=RandomForestRegressor(),
+            estimator=RandomForestRegressor(n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH),
             param_grid=grid_params,
             cv=4,
-            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='neg_root_mean_squared_error',
             verbose=2
         )
