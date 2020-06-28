@@ -20,9 +20,10 @@ class KNeighborsClassifierMethod(Methods.Method):
         data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
         label = DatasetProcessor.prepare_labels(self.data)
         self.model = GridSearchCV(
-            estimator=KNeighborsClassifier(n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH),
+            estimator=KNeighborsClassifier(),
             param_grid=grid_params,
             cv=4,
+            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='balanced_accuracy',
             verbose=2
         )
@@ -43,9 +44,10 @@ class KNeighborsRegressorMethod(Methods.Method):
         data = DatasetProcessor.preprocess_input_data(self.data)[:-1]
         label = DatasetProcessor.prepare_labels(self.data)
         self.model = GridSearchCV(
-            estimator=KNeighborsRegressor(n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH),
+            estimator=KNeighborsRegressor(),
             param_grid=grid_params,
             cv=4,
+            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='neg_root_mean_squared_error',
             verbose=2
         )

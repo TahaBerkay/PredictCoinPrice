@@ -20,7 +20,8 @@ class DatasetProcessor:
     def prepare_labels(data):
         hold_ranges = (data['Close'] * DatasetProcessor.self_hold_range)[:-1]
         close_diffs = pd.np.diff(data['Close'].to_numpy())
-        label_list = [int(pd.np.sign(close_diff) + 1 if abs(close_diff) > hold_range else 1) for close_diff, hold_range in zip(close_diffs, hold_ranges)]
+        label_list = [int(pd.np.sign(close_diff) + 1 if abs(close_diff) > hold_range else 1) for close_diff, hold_range
+                      in zip(close_diffs, hold_ranges)]
         label = label_list[long_periods + short_periods:]
         # label = data["Close"].shift(-1)[:-1].iloc[long_periods+short_periods:].reset_index()
         return label

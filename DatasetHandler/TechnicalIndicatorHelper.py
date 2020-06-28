@@ -23,7 +23,8 @@ class TechnicalIndicatorHelper:
         prediction_of_specific_methods = pd.DataFrame([close_diffs, close_diffs2, close_diffs3])
         means = prediction_of_specific_methods.mean(axis=0)
         return \
-            pd.concat([adxi.rename('adxi'), cci.rename('cci'), rsi, macd.rename('macd'), so.rename('so'), means.rename('means')], axis=1).iloc[
+            pd.concat([adxi.rename('adxi'), cci.rename('cci'), rsi, macd.rename('macd'), so.rename('so'),
+                       means.rename('means')], axis=1).iloc[
             long_periods + short_periods:].replace([pd.np.inf, -pd.np.inf], pd.np.nan).fillna(0)[
                 ['adxi', 'cci', 'rsi', 'macd', 'so', 'means']]
 

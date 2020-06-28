@@ -1,7 +1,6 @@
 import os
 
 import pandas as pd
-from hmmlearn.hmm import GMMHMM
 # from hmmlearn.hmm import MultinomialHMM
 from hmmlearn.hmm import GaussianHMM
 from pandas import np
