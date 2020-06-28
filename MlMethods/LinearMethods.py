@@ -2,6 +2,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 
+import CustomSettings
 from DatasetHandler.DatasetProcessor import DatasetProcessor
 from MlMethods import Methods
 
@@ -19,7 +20,7 @@ class LogisticRegressionMethod(Methods.Method):
             estimator=LogisticRegression(max_iter=1000),
             param_grid=self.grid_params,
             cv=4,
-            n_jobs=-1,
+            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='balanced_accuracy',
             verbose=2
         )

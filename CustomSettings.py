@@ -10,6 +10,7 @@ try:
     DEFAULT_DATASET = config.get('custom', 'DEFAULT_DATASET')
     DATE_FORMAT = config.get('custom', 'DATE_FORMAT')
     DATAFILES_DIR = config.get('custom', 'DATAFILES_DIR')
+    NB_JOBS_GRIDSEARCH = int(config.get('custom', 'NB_JOBS_GRIDSEARCH'))
     HOLD_RANGE = float(config.get('custom', 'HOLD_RANGE'))
     WINDOW_SIZE = int(config.get('custom', 'WINDOW_SIZE'))
     SHORT_PERIODS = int(config.get('custom', 'SHORT_PERIODS'))

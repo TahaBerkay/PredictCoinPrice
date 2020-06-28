@@ -2,6 +2,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.svm import SVC
 from sklearn.svm import SVR
 
+import CustomSettings
 from DatasetHandler.DatasetProcessor import DatasetProcessor
 from MlMethods import Methods
 
@@ -22,7 +23,7 @@ class SvmMethod(Methods.Method):
             estimator=SVC(),
             param_grid=grid_params,
             cv=4,
-            n_jobs=-1,
+            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='balanced_accuracy',
             verbose=2
         )
@@ -46,7 +47,7 @@ class SvrMethod(Methods.Method):
             estimator=SVR(),
             param_grid=grid_params,
             cv=4,
-            n_jobs=-1,
+            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='neg_root_mean_squared_error',
             verbose=2
         )

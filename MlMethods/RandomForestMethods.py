@@ -2,6 +2,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GridSearchCV
 
+import CustomSettings
 from DatasetHandler.DatasetProcessor import DatasetProcessor
 from MlMethods import Methods
 
@@ -21,7 +22,7 @@ class RandomForestClassifierMethod(Methods.Method):
             estimator=RandomForestClassifier(),
             param_grid=grid_params,
             cv=4,
-            n_jobs=-1,
+            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='balanced_accuracy',
             verbose=2
         )
@@ -45,7 +46,7 @@ class RandomForestRegressorMethod(Methods.Method):
             estimator=RandomForestRegressor(),
             param_grid=grid_params,
             cv=4,
-            n_jobs=-1,
+            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='neg_root_mean_squared_error',
             verbose=2
         )

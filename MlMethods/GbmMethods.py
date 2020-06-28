@@ -4,6 +4,7 @@ import xgboost as xgb
 from catboost import CatBoostClassifier
 from sklearn.model_selection import GridSearchCV
 
+import CustomSettings
 from DatasetHandler.DatasetProcessor import DatasetProcessor
 from MlMethods import Methods
 
@@ -28,7 +29,7 @@ class LightGbmMethod(Methods.Method):
             estimator=lgb.LGBMClassifier(),
             param_grid=self.params,
             cv=4,
-            n_jobs=-1,
+            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='balanced_accuracy',
             verbose=2
         )
@@ -63,7 +64,7 @@ class XGBoostMethod(Methods.Method):
             estimator=xgb.XGBClassifier(),
             param_grid=self.params,
             cv=4,
-            n_jobs=-1,
+            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='balanced_accuracy',
             verbose=2
         )
@@ -95,7 +96,7 @@ class CatBoostMethod(Methods.Method):
             estimator=CatBoostClassifier(),
             param_grid=self.params,
             cv=4,
-            n_jobs=-1,
+            n_jobs=CustomSettings.NB_JOBS_GRIDSEARCH,
             scoring='balanced_accuracy',
             verbose=2
         )
